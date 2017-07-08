@@ -72,14 +72,46 @@ trait Random
     """
     (next().u128() << 64) or next().u128()
 
-  fun ref int(n: U64): U64 =>
+  fun ref ulong(): ULong =>
+    """
+    A random integer in [0, ULong.max_value()]
+    """
+    ifdef ilp32 or llp64 then
+      (next() >> 32).ulong()
+    else
+      next().ulong()
+    end
+
+  fun ref usize(): USize =>
+    """
+    A random integer in [0, USize.max_value()]
+    """
+    ifdef ilp32 then
+      (next() >> 32).usize()
+    else
+      next().usize()
+    end
+
+  fun ref int[N: (Unsigned val & Real[N] val) = U64](n: N): N =>
     """
     A random integer in [0, n)
     """
-    (real() * n.f64()).u64()
+    N.from[F64](real() * n.f64())
 
   fun ref real(): F64 =>
     """
     A random number in [0, 1)
     """
     (next() >> 11).f64() * (F64(1) / 9007199254740992)
+
+  fun ref shuffle[A](array: Array[A]) =>
+    """
+    Shuffle the elements of the array into a random order, mutating the array.
+    """
+    var i: USize = array.size()
+    try
+      while i > 1 do
+        let ceil = i = i - 1
+        array.swap(i, int[USize](ceil))
+      end
+    end
