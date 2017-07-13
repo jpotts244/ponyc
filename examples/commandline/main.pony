@@ -4,7 +4,7 @@ actor Main
   new create(env: Env) =>
     try
       let cmd =
-        match CommandParser(cli_spec()).parse(env.args, env.vars())
+        match CommandParser(cli_spec()?).parse(env.args, env.vars())
         | let c: Command => c
         | let ch: CommandHelp =>
             ch.print_help(env.out)
@@ -31,17 +31,17 @@ actor Main
     ], [
       CommandSpec.leaf("say", "Say something", Array[OptionSpec](), [
         ArgSpec.string("words", "The words to say")
-      ])
+      ])?
       CommandSpec.leaf("emote", "Send an emotion", [
         OptionSpec.f64("speed", "Emote play speed" where default' = F64(1.0))
       ], [
         ArgSpec.string("emotion", "Emote to send")
-      ])
+      ])?
       CommandSpec.parent("config", "Configuration commands", Array[OptionSpec](), [
         CommandSpec.leaf("server", "Server configuration", Array[OptionSpec](), [
           ArgSpec.string("address", "Address of the server")
-        ])
-      ])
-    ])
-    cs.add_help()
+        ])?
+      ])?
+    ])?
+    cs.add_help()?
     cs
