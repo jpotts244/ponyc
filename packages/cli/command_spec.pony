@@ -53,7 +53,7 @@ class CommandSpec
     Create a command spec that can accept options and child commands, but not
     arguments.
     """
-    _name = _assertName(name')
+    _name = _assertName(name')?
     _descr = descr'
     for o in options'.values() do
       _options.update(o.name(), o)
@@ -72,7 +72,7 @@ class CommandSpec
     Create a command spec that can accept options and arguments, but not child
     commands.
     """
-    _name = _assertName(name')
+    _name = _assertName(name')?
     _descr = descr'
     for o in options'.values() do
       _options.update(o.name(), o)
@@ -109,7 +109,7 @@ class CommandSpec
     if _args.size() == 0 then
       let help_cmd = CommandSpec.leaf(_help_name, "", Array[OptionSpec](), [
         ArgSpec.string("command" where default' = "")
-      ])
+      ])?
       _commands.update(_help_name, help_cmd)
     end
 

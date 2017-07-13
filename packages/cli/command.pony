@@ -33,10 +33,10 @@ class box Command
   fun box spec() : CommandSpec box => _spec
 
   fun box option(name: String): Option =>
-    try _options(name) else Option(OptionSpec.bool(name), false) end
+    try _options(name)? else Option(OptionSpec.bool(name), false) end
 
   fun box arg(name: String): Arg =>
-    try _args(name) else Arg(ArgSpec.bool(name), false) end
+    try _args(name)? else Arg(ArgSpec.bool(name), false) end
 
 class val Option
   """
